@@ -12,6 +12,12 @@
 			<h1>{{titulo | uppercase}}</h1>
 			<h2>{{subtitulo | lowercase }}</h2>
 			<h2>{{presentacion | capitalize}}</h2>
+			el contador esta en {{ contador }}
+			<button v-on:click="sumar"> Sumar 1</button>
+			<button v-on:click="restar"> Restar 1</button>
+			<!-- <button @click="sumar"> Sumar 1</button>
+			<button @click="restar"> Restar 1</button> -->
+			
 			<!-- <a  :href="url"  target="_blank">ir a {{pagina}}</a> -->
 
 		</template>
@@ -46,6 +52,7 @@
 				titulo: 'estas en platzi',
 				subtitulo: 'curso de vuejs',
 				presentacion: 'joel suarez',
+				contador: 0,
 			},
 			filters: {
 				uppercase: function (str){
@@ -56,6 +63,15 @@
 				},
 				capitalize: str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 			},
+			methods:{
+				sumar: function (){
+					this.contador++		
+				},
+				restar: function(){
+					this.contador--		
+
+				}
+			}
 
 
 
