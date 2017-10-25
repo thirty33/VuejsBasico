@@ -7,22 +7,97 @@
 <body>
 
 	<div id="app">
-		
-		Hola {{ nombre }}
-		<a :href="url"  target="_blank">ir a {{pagina}}</a>
+		<template v-if="mostrar">
+			<!-- v-if desaperece del dom, no se puede utilizar v-show -->
+			<h1>{{titulo | uppercase}}</h1>
+			<h2>{{subtitulo | lowercase }}</h2>
+			<h2>{{presentacion | capitalize}}</h2>
+			<!-- <a  :href="url"  target="_blank">ir a {{pagina}}</a> -->
+
+		</template>
+		<div v-show="!mostrar"> 
+			<!-- Simplemente coloca un display:none -->
+			Esto esta oculto
+		</div>
+	</div>
+
+	<div id="main">
+		<ul>
+			<li v-for="item in people">{{item | capitalize}}</li>
+		</ul>
+		<input type="text" v-model="name" v-on:keyup.enter="addName">
+		<input type="text" v-model="info" >
+		<p v-bind:title="info" >texto de relleno... {{ info }}</p>
 	</div>
 	
+	<div id="likes">
+		<p v-bind:title="like"> tiene {{like}} likes</p>	
+		<input type="text" v-model="like" v-on:keyup.enter="addLike">	
+	</div>
 
 	<script src="https://unpkg.com/vue"></script> 
 	<script type="text/javascript">
 		let app = new Vue({
 			el: '#app',
 			data: {
-				nombre: 'Mundo!',
 				url: 'https://google.com',
 				pagina: 'Google',
+				mostrar: true,
+				titulo: 'estas en platzi',
+				subtitulo: 'curso de vuejs',
+				presentacion: 'joel suarez',
+			},
+			filters: {
+				uppercase: function (str){
+					return str.toUpperCase()	
+				},
+				lowercase: function (str){
+					return str.toLowerCase()
+				},
+				capitalize: str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+			},
+
+
+
+		})
+
+		let likes = new Vue({
+			el: '#likes',
+			data:{
+				like: '0',
+
+			},
+			methods:{
+				addLike: function(){
+					return this.like++
+				},
+				quitlike: function(){
+					return this.like--
+				}
 			}
 		})
+
+		let main = new Vue({
+			el: '#main',
+			data: {
+				people: ['linda', 'isabella', 'luisa', 'diana'],
+				info : ''
+			},
+			filters: {
+				capitalize: function (str){
+					return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+				}
+			},
+			name: '',
+			methods: {
+				addName: function(){
+					this.people.push(this.name)
+					this.name = ''	
+				}
+			} 
+		})
+
+
 
 
 	</script>
