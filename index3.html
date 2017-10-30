@@ -44,7 +44,49 @@
 		</form>
 
 		<input type="button" v-bind:value="boton" v-on:click="cambiarletras">
-			
+
+
+		<!-- Propiedades computadas ejemplo -->
+		<!-- <h1> {{ mensaje }}</h1>
+		<h1> {{ mensajeAlReves }}</h1> -->
+
+		<h1>Tareas con prioridad alta, ejemplo computed properrties</h1>
+		
+		<ul>
+			<li v-for="tarea in tareasConPrioridad">
+				{{ tarea.nombre }}
+			</li>
+		</ul>
+
+		<h1>Tareas por antiguedad </h1>
+		
+		<ul>
+			<li v-for="tarea in tareasPorAntiguedad">
+				{{ tarea.nombre }}
+			</li>
+		</ul>
+
+		<h1>Filtrado de tareas por antiguedad</h1>
+
+		<ul>
+			<li v-for="tarea in antiguedadMinima">
+				{{ tarea.nombre }}
+			</li>
+
+		</ul>
+
+		<input type="range" min="0" max="150" v-model="minimo">
+
+		<h1>Busqueda de una tarea </h1>
+
+		<input type="search" v-model="busqueda" placeholder="buscar juego">
+
+		<ul>
+			<li v-for="tarea in buscarTarea">
+				{{ tarea.nombre }}
+			</li>
+
+		</ul>
 
 	</div>
 	
@@ -59,34 +101,56 @@
 			el: '#main',
 			
 			data: {
+				busqueda: '',
 				boton: 'hola',
 				conectado: true,
 				edad: 18,
 				feriados: ['sabado','domingo'],
+				minimo: 60,
 				tareas: [
-					{nombre:'hacer la cama',prioridad: 'alta'},	
-					{nombre:'vuejs',prioridad: 'alta'},	
-					{nombre:'fifa18',prioridad: 'baja'},	
+					{nombre:'hacer la cama',prioridad: 'alta',antiguedad: 24},	
+					{nombre:'vuejs',prioridad: 'alta',antiguedad: 50},	
+					{nombre:'fifa18',prioridad: 'baja',antiguedad: 80},	
 				],
-				nuevaTarea: {nombre: '', prioridad: ''},
+				nuevaTarea: {nombre: '', prioridad: '', antiguedad: null},
 				persona: {
 					nombre: 'joel suarez',
 					edad: '22',
 					profesion: 'programador',
-				}
+				},
+				mensaje: 'arepa',
 			},
 			methods: {
 				agregarTarea () {
 					//this, hace referencia a instancia vue
 					this.tareas.unshift(this.nuevaTarea)
-					this.nuevaTarea = {nombre: '', prioridad: ''}
+					this.nuevaTarea = {nombre: '', prioridad: '', antiguedad: null}
 				},
 				cambiarletras () {
 					if(this.boton === 'hola')
 					this.boton = 'chao'
 					else this.boton = 'hola'
 				}
-			}
+			},
+			computed: {
+				mensajeAlReves(){
+					return this.mensaje.split('').reverse().join('')
+				},
+				tareasConPrioridad(){
+					return this.tareas.filter(function(tarea){
+						return tarea.prioridad === 'alta' 
+					})
+				},
+				tareasPorAntiguedad(){
+					return this.tareas.sort((a,b) => b.antiguedad - a.antiguedad)
+				},
+				antiguedadMinima(){
+					return this.tareas.filter((tarea)=> tarea.antiguedad >= this.minimo)
+				},
+				buscarTarea(){
+					return this.tareas.filter((tarea)=>tarea.nombre.includes(this.busqueda))
+				}
+			},
 			
 		})
 
