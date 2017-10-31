@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
 	<title>Curso de vuejs - uso Axios</title>
 
 	<style>
@@ -10,6 +11,46 @@
 		.completado {
 			text-decoration: line-through;
 		}
+		/*Entrada de la animation*/
+		.aparecer-enter {
+			opacity:0;
+		}
+		/*Transcurso de la entrada*/
+		.aparecer-enter-active{
+			transition: opacity 1s;
+		}
+
+		/*salida de la animacion*/
+		.aparecer-leave-to{
+			opacity: 0;
+		}
+
+		/*Transcurso de la salida*/
+		.aparecer-leave-active{
+			transition: opacity 1s;	
+		}
+
+		/*animacion bounce de ejemplo*/
+
+		.bounce-enter-active {
+		  animation: bounce-in .5s;
+		}
+		.bounce-leave-active {
+		  animation: bounce-in .5s reverse;
+		}
+
+		@keyframes bounce-in {
+		  0% {
+		    transform: scale(0);
+		  }
+		  50% {
+		    transform: scale(1.5);
+		  }
+		  100% {
+		    transform: scale(1);
+		  }
+		}
+
 	</style>
 </head>
 <body>
@@ -114,12 +155,64 @@
 		<h2> hay {{ TareasCompletadas.length }} tareas completas</h2>
 
 
+		<h1>Estudiando transitions en vuejs</h1>
+		
+		<!-- <button @click="mostrar = !mostrar">Mostrar/Ocultar</button> -->
+
+		<transition name="aparecer">
+			
+			<h1 v-if="mostrar" v-text="mensajes.transicion"></h1>
+
+		</transition>
+
+
+		<h1>Animaciones con vuejs</h1>
+
+		<!-- con appear renderizo la trancision apenas recargue -->
+		<transition name="bounce" appear>
+			
+			<h1 v-if="mostrar" v-text="mensajes.animacion"></h1>
+
+		</transition>
+
+
+		<h1>Animaciones con Animate.css</h1>
+
+
+		<transition 
+			name="animate.css"
+			enter-active-class="animated rotateInUpLeft"
+			leave-active-class="animated zoomOutUp"
+			>
+			
+			<h1 v-if="mostrar" v-text="mensajes.animatedcss"></h1>
+
+		</transition>
+
+
+		<h1>Transicion entre diferentes elementos</h1>
+
+
+		<!-- pasar de un elemento a otro, key para diferenciar entre elementos iguales(h1) y mode para especificarle el orden de la transicion -->
+		<transition name="aparecer" mode="out-in">
+			
+			<h1 v-if="mostrar" v-text="mensajes.diferentes" key="element1"></h1>
+			<h1 v-else="mostrar" v-text="mensajes.diferentesOut" key="element2"></h1>
+
+		</transition>
+
+
+
+		<button @click="mostrar = !mostrar">Mostrar/Ocultar</button>
+
+
 	</div>
 	
 	
 
 	<script src="https://unpkg.com/vue"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.min.js"></script>
+
 	<script src=""></script> 
 	<script type="text/javascript">
 		
@@ -127,6 +220,7 @@
 			el: '#main',
 			
 			data: {
+
 				busqueda: '',
 				boton: 'hola',
 				conectado: true,
@@ -146,6 +240,14 @@
 				},
 				mensaje: 'arepa',
 				completadas: 0,
+				mensajes: {
+					transicion: 'transicion con vuejs',
+					animacion: 'animacion con vuejs',
+					animatedcss: 'animacion con animated.css',
+					diferentes: 'elemento 1',
+					diferentesOut: 'elemento 2', 
+				},
+				mostrar: true,
 			},
 			methods: {
 				agregarTarea () {
