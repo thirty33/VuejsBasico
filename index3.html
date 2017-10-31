@@ -4,6 +4,13 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 	<title>Curso de vuejs - uso Axios</title>
+
+	<style>
+		
+		.completado {
+			text-decoration: line-through;
+		}
+	</style>
 </head>
 <body>
 
@@ -88,6 +95,25 @@
 
 		</ul>
 
+		<h1>Data binding en atributos y clases</h1>
+		<ul>
+			<li @click="completarTarea(tarea)" v-for="tarea in tareas" :class="{completado: tarea.completado}">
+				{{ tarea.nombre }} <strong>
+					{{ tarea.completado }}
+				</strong>
+			</li>
+		</ul>
+
+		<h1>Mostrar tareas completas con methods</h1>
+		
+		<input type="button" @click="buscarTareasCompletadas" value="buscar">
+		<h2>el numero de tareas completadas es: {{ completadas }}</h2>
+
+		<h1> Mostra tareas completas con computed properties</h1>
+
+		<h2> hay {{ TareasCompletadas.length }} tareas completas</h2>
+
+
 	</div>
 	
 	
@@ -108,17 +134,18 @@
 				feriados: ['sabado','domingo'],
 				minimo: 60,
 				tareas: [
-					{nombre:'hacer la cama',prioridad: 'alta',antiguedad: 24},	
-					{nombre:'vuejs',prioridad: 'alta',antiguedad: 50},	
-					{nombre:'fifa18',prioridad: 'baja',antiguedad: 80},	
+					{nombre:'hacer la cama',prioridad: 'alta',antiguedad: 24,completado:false},	
+					{nombre:'vuejs',prioridad: 'alta',antiguedad: 50,completado:false},	
+					{nombre:'fifa18',prioridad: 'baja',antiguedad: 80,completado:false},	
 				],
-				nuevaTarea: {nombre: '', prioridad: '', antiguedad: null},
+				nuevaTarea: {nombre: '', prioridad: '', antiguedad: null,completado:false},
 				persona: {
 					nombre: 'joel suarez',
 					edad: '22',
 					profesion: 'programador',
 				},
 				mensaje: 'arepa',
+				completadas: 0,
 			},
 			methods: {
 				agregarTarea () {
@@ -130,6 +157,20 @@
 					if(this.boton === 'hola')
 					this.boton = 'chao'
 					else this.boton = 'hola'
+				},
+				completarTarea(tarea){
+					tarea.completado = !tarea.completado
+				},
+				buscarTareasCompletadas(){
+					self = this
+					self.completadas = 0
+					this.tareas.forEach(function(tarea){
+						if(tarea.completado == true){
+							self.completadas++
+						}
+					})
+					
+
 				}
 			},
 			computed: {
@@ -149,6 +190,11 @@
 				},
 				buscarTarea(){
 					return this.tareas.filter((tarea)=>tarea.nombre.includes(this.busqueda))
+				},
+				TareasCompletadas(){
+					
+					return this.tareas.filter((tarea)=>tarea.completado)
+
 				}
 			},
 			
