@@ -137,7 +137,9 @@
 
 	</candidato> -->
 
-	<alerta tipo="alerta--verde" posicion="alerta--izquierda">
+	<!-- Uso de templates y slots -->
+
+	<!-- <alerta tipo="alerta--verde" posicion="alerta--izquierda">
 		<template slot="header">todo ok :)</template>
 		<template slot="contenido">contenido 1</template>
 		<template slot="footer">footer 1</template>
@@ -149,14 +151,50 @@
 		<template slot="contenido">contenido 2</template>
 		<template slot="footer">footer 2</template>
 
-	</alerta>
+	</alerta> -->
 
+	<!-- Uso de templates y slots -->
+
+
+	<!-- Scoped slots -->
+
+	<mis-tareas :listado="tasks">
+		<template slot-scope="datos">
+			<li><h1> {{ datos.title}}</h1></li>
+		</template>
+
+
+	</mis-tareas>	
+
+	
+	<mis-tareas :listado="tasks">
+		<template slot-scope="datos">
+			<li><h3> {{ datos.title}}</h3></li>
+		</template>
+
+
+	</mis-tareas>	
+	<!-- /Scoped slots -->
 
 	</div>
 
 
 
+	<!-- mis tareas template - Scoped slots -->
 
+	<template id="mis-tareas-template">
+		
+		<ul>
+			<slot v-for="task in listado" :title="task.name">
+				
+
+			</slot>
+			
+			
+		</ul>
+
+	</template>
+	<!-- /mis tareas template - Scoped slots -->
 
 
 	<template id="elegir-ganador-template">
@@ -298,6 +336,12 @@
 				`
 			})
 
+			Vue.component('mis-tareas', {
+				props: ['listado'],
+				template: '#mis-tareas-template',
+
+			})
+
 			let main = new Vue({
 			el: '#main',
 			mounted(){
@@ -307,6 +351,12 @@
 				autor: 'juan perez',
 				personas:['pedro', 'alicia,', 'juan', 'cristobal'],
 				candidatos: [],
+				tasks: [
+					{name: 'hacer la cama'},
+					{name: 'hacer la cena'},
+					{name: 'hacer el desayuno'},
+
+				]
 			},
 			methods: {
 				obtenerCandidatos(){
