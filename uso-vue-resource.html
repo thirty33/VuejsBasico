@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+	<title>Curso de vuejs - uso Axios</title>
+
+	<style>
+		
+		.completado {
+			text-decoration: line-through;
+		}
+		/*Entrada de la animation*/
+		.aparecer-enter {
+			opacity:0;
+		}
+		/*Transcurso de la entrada*/
+		.aparecer-enter-active{
+			transition: opacity 1s;
+		}
+
+		/*salida de la animacion*/
+		.aparecer-leave-to{
+			opacity: 0;
+		}
+
+		/*Transcurso de la salida*/
+		.aparecer-leave-active{
+			transition: opacity 1s;	
+		}
+
+		/*animacion bounce de ejemplo*/
+
+		.bounce-enter-active {
+		  animation: bounce-in .5s;
+		}
+		.bounce-leave-active {
+		  animation: bounce-in .5s reverse;
+		}
+
+		@keyframes bounce-in {
+		  0% {
+		    transform: scale(0);
+		  }
+		  50% {
+		    transform: scale(1.5);
+		  }
+		  100% {
+		    transform: scale(1);
+		  }
+		}
+
+	</style>
+</head>
+<body>
+
+	
+
+	<div id="main" class="container">
+		
+	
+	
+	<img v-for="persona in personas"
+	:src="persona.picture.thumbnail"
+	:alt="persona.name.first">
+
+
+
+	</div>
+	
+	
+
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.min.js"></script>
+
+	<script src=""></script> 
+	<script type="text/javascript">
+		
+				let main = new Vue({
+			el: '#main',
+			mounted() {
+				this.cargarPersonas()
+			},
+			
+			data: {
+				personas: []
+				
+			},
+			methods: {
+				cargarPersonas(){
+					this.$http.get('https://randomuser.me/api/?results=50')
+							.then((respuesta)=> this.personas = respuesta.body.results)
+				}
+			},
+			computed: {
+				mensajeAlReves(){
+					return this.mensaje.split('').reverse().join('')
+				},
+				tareasConPrioridad(){
+					return this.tareas.filter(function(tarea){
+						return tarea.prioridad === 'alta' 
+					})
+				},
+				tareasPorAntiguedad(){
+					return this.tareas.sort((a,b) => b.antiguedad - a.antiguedad)
+				},
+				antiguedadMinima(){
+					return this.tareas.filter((tarea)=> tarea.antiguedad >= this.minimo)
+				},
+				buscarTarea(){
+					return this.tareas.filter((tarea)=>tarea.nombre.includes(this.busqueda))
+				},
+				TareasCompletadas(){
+					
+					return this.tareas.filter((tarea)=>tarea.completado)
+
+				}
+			},
+			
+		})
+
+
+
+
+	</script>
+
+</body>
+</html>
