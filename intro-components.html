@@ -89,11 +89,39 @@
 		
 	</autor>
 
-	
+	<h1>Candidatos</h1>
+
+	<candidato v-for="candidato in candidatos"
+				:nombre="candidato.name.first"
+				:correo="candidato.email"
+				:imagen="candidato.picture.thumbnail"
+				inline-template :location="candidato.location">
+
+				<blockquote>
+					<img :src="imagen" align="right">
+					<h1> {{ nombre}} </h1>
+					<h2> {{ correo }}</h2>
+					<hr>
+
+					<ul>
+						<li v-for="(value, key, index) in location">
+							el valor es {{ value }} la llave es {{ key }} y el index {{ index }}
+						</li>
+					</ul>
+
+				</blockquote>
+
+
+	</candidato>
 
 
 
 	</div>
+
+
+
+
+
 
 	<template id="elegir-ganador-template">
 		
@@ -181,14 +209,49 @@
 						this.nombre = this.nombre.toUpperCase()
 					}
 				}
-				
+
+			})
+
+			Vue.component('candidato', {
+				// props: ['nombre', 'correo', 'imagen'],
+				props: {
+					nombre: {
+						type: String, 
+						// null = *
+						required: true,
+					},
+					correo: {
+						type: String,
+						default: '123@gmail.com'
+					},
+					imagen: String,
+					location: {
+						type: Object,
+						default(){
+							return {
+								ciudad:'valencia',
+							}
+						}
+					},
+				}
+				// template: '#candidato-template'
 			})
 
 			let main = new Vue({
 			el: '#main',
+			mounted(){
+				this.obtenerCandidatos()	
+			},
 			data: {
 				autor: 'juan perez',
-				personas:['pedro', 'alicia,', 'juan', 'cristobal']
+				personas:['pedro', 'alicia,', 'juan', 'cristobal'],
+				candidatos: [],
+			},
+			methods: {
+				obtenerCandidatos(){
+					axios.get('https://randomuser.me/api/?results=50')
+						.then((respuesta => this.candidatos = respuesta.data.results))
+				}
 			}
 			
 			})
