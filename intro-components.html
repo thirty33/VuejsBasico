@@ -51,6 +51,29 @@
 		  }
 		}
 
+
+		/*tipos*/
+
+		.alerta--error {
+			background-color: red;
+		}
+
+		.alerta--verde {
+			background-color: green;
+		}
+
+
+		.alerta{
+			position: absolute;
+		}
+
+		.alerta--derecha {
+			right: 0;
+		}
+
+		.alerta--izquierda {
+			left: 0;
+		}
 	</style>
 </head>
 <body>
@@ -89,7 +112,7 @@
 		
 	</autor>
 
-	<h1>Candidatos</h1>
+	<!-- <h1>Candidatos</h1>
 
 	<candidato v-for="candidato in candidatos"
 				:nombre="candidato.name.first"
@@ -112,8 +135,21 @@
 				</blockquote>
 
 
-	</candidato>
+	</candidato> -->
 
+	<alerta tipo="alerta--verde" posicion="alerta--izquierda">
+		<template slot="header">todo ok :)</template>
+		<template slot="contenido">contenido 1</template>
+		<template slot="footer">footer 1</template>
+
+	</alerta>
+
+	<alerta tipo="alerta--error" posicion="alerta--derecha">
+		<template slot="header">todo ok :)</template>
+		<template slot="contenido">contenido 2</template>
+		<template slot="footer">footer 2</template>
+
+	</alerta>
 
 
 	</div>
@@ -235,6 +271,31 @@
 					},
 				}
 				// template: '#candidato-template'
+			})
+
+			Vue.component('alerta', {
+				props: ['tipo', 'posicion'],
+				template:`
+				<section class="alerta" :class="[tipo, posicion]">
+					<header class="alerta_header">
+						<slot name="header">hola</header>
+					</header>
+					<div class="alerta_contenido">
+					<slot name="contenido">
+						Contenido medio
+					</slot>
+					</div>
+					<footer class="alerta_footer">
+
+					<slot name="footer">
+					este es el footer
+					</slot>
+
+					</footer>
+					
+
+				</section>
+				`
 			})
 
 			let main = new Vue({
