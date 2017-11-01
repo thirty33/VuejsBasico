@@ -70,12 +70,26 @@
 
 
 	<h1>listado de personas</h1>
-	<elegir-ganador :listado="personas">
-		
+	<elegir-ganador :listado="personas" inline-template>
+		<div>
+			<h1 v-if="ganador">el ganador es {{ ganador }} </h1>
+			<template v-else>
+
+				<h1>participantes</h1>
+				<ul>
+					<li v-for="persona in listado">{{ persona 	}}</li>
+				</ul>
+			</template>
+			<button @click="elegirGanador">Elegir ganador</button>
+		</div>	
 
 	</elegir-ganador>
 
-	</main>
+	<autor :nombre="autor">
+		
+	</autor>
+
+	
 
 
 
@@ -94,6 +108,8 @@
 		</template>
 		<button @click="elegirGanador">Elegir ganador</button>
 	</div>	
+
+
 
 
 	</template>
@@ -137,7 +153,7 @@
 
 			Vue.component('elegir-ganador', {
 				props: ['listado'],
-				template:'#elegir-ganador-template',
+				// template:'#elegir-ganador-template',
 				methods:{
 					elegirGanador(){
 						let cantidad = this.participantes.length
@@ -152,13 +168,26 @@
 						participantes: this.listado
 					}
 				},
-				
 
+
+			})
+
+			Vue.component('autor', {
+				props: ['nombre'],
+				template: `<div><h1>el nombre del autor es {{ nombre }}</h1><button @click="cambiarAutor">Cambiar Prop</button></div>`,
+				// no mutar elementos desde children a padre 
+				methods:{
+					cambiarAutor(){
+						this.nombre = this.nombre.toUpperCase()
+					}
+				}
+				
 			})
 
 			let main = new Vue({
 			el: '#main',
 			data: {
+				autor: 'juan perez',
 				personas:['pedro', 'alicia,', 'juan', 'cristobal']
 			}
 			
