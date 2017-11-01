@@ -61,7 +61,10 @@
 		.alerta--verde {
 			background-color: green;
 		}
-
+		
+		.alerta--naranja {
+			background-color: orange;
+		}
 
 		.alerta{
 			position: absolute;
@@ -69,6 +72,11 @@
 
 		.alerta--derecha {
 			right: 0;
+		}
+
+		.alerta--derecha--arriba {
+			right: 0;
+			top:0;
 		}
 
 		.alerta--izquierda {
@@ -139,19 +147,30 @@
 
 	<!-- Uso de templates y slots -->
 
-	<!-- <alerta tipo="alerta--verde" posicion="alerta--izquierda">
+	<button @click="mostrarExito=!mostrarExito">Exito</button>
+	<button @click="mostrarError=!mostrarError">Error</button>
+	<button @click="mostrarAdvertencia=!mostrarAdvertencia">Advertencia</button>
+
+	<alerta @ocultar="mostrarExito = false" v-show="mostrarExito" tipo="alerta--verde" posicion="alerta--izquierda">
 		<template slot="header">todo ok :)</template>
 		<template slot="contenido">contenido 1</template>
 		<template slot="footer">footer 1</template>
 
 	</alerta>
 
-	<alerta tipo="alerta--error" posicion="alerta--derecha">
+	<alerta @ocultar="mostrarError = false" v-show="mostrarError" tipo="alerta--error" posicion="alerta--derecha">
 		<template slot="header">todo ok :)</template>
 		<template slot="contenido">contenido 2</template>
 		<template slot="footer">footer 2</template>
 
-	</alerta> -->
+
+	</alerta>
+
+	<alerta @ocultar="mostrarAdvertencia = false" v-show="mostrarAdvertencia" tipo="alerta--naranja" posicion="alerta--derecha--arriba">
+		<template slot="header">todo ok :)</template>
+		<template slot="contenido">contenido 3</template>
+		<template slot="footer">footer 3</template>
+	</alerta>
 
 	<!-- Uso de templates y slots -->
 
@@ -315,8 +334,10 @@
 				props: ['tipo', 'posicion'],
 				template:`
 				<section class="alerta" :class="[tipo, posicion]">
+
 					<header class="alerta_header">
-						<slot name="header">hola</header>
+						<a href="#" @click="ocultarWidget">Cerrar</a>
+						<slot name="header">hola</slot>
 					</header>
 					<div class="alerta_contenido">
 					<slot name="contenido">
@@ -333,7 +354,13 @@
 					
 
 				</section>
-				`
+				`,
+				methods: {
+					ocultarWidget(){
+						// emitiendo un custom event
+						this.$emit('ocultar')
+					}
+				}
 			})
 
 			Vue.component('mis-tareas', {
@@ -356,7 +383,12 @@
 					{name: 'hacer la cena'},
 					{name: 'hacer el desayuno'},
 
-				]
+	// Custom Events
+
+				],
+				mostrarExito: false,
+				mostrarError: false,
+				mostrarAdvertencia: false, 
 			},
 			methods: {
 				obtenerCandidatos(){
