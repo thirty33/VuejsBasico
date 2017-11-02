@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+	<title>Curso de vuejs - uso Axios</title>
+
+	<style>
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+		}
+
+		.usuarios {
+			margin:20px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: flex-start;
+		}
+		.usuario {
+			padding: 10px;
+			flex-basis: 33%;
+			border: 1px solid gray;
+			border-radius: 10px;
+			display:flex;
+		}
+
+		.usuario img {
+			flex-basis: 33%;
+		}
+
+		.usuario section {
+			flex-basis:66%;
+		}
+
+		.cabecera {
+			display:flex;
+			justify-content: space-around;
+			align-items:center;
+		}
+
+		.usuarioh1 {
+			font-size: 15px;
+		}
+
+
+	</style>
+</head>
+<body>
+
+	
+
+	<div id="main" class="container">
+		
+	<usuarios>
+		<h1> usuarios de mi startup</h1>
+
+	</usuarios>
+	
+
+
+	</div>
+
+	
+	<template id="usuarios-template">
+		
+		<div>
+			<section class="cabecera">
+				<slot></slot>
+				<input v-model="keyLook" type="search" placeholder="filtrar Usuarios"> 
+			</section>
+
+			<hr>
+
+			<section class="usuarios">
+				<!-- <p v-for="usuario in users">{{ usuario.nombre }}</p> -->
+				<usuario v-for="usuario in filtrarUsuarios" :dato="usuario"></usuario>
+
+			</section>	
+
+
+		</div>
+
+	</template>
+
+	<template id="usuario-template">
+		<div class="usuario">
+			<img align="left" :src="dato.foto" :alt="dato.nombre">
+			<section class="usuarioh1">
+				<small> {{ dato.nombre }} </small>
+				<small> {{ dato.correo }} </small>
+			</section>
+
+		</div>
+
+	</template>
+
+	
+	
+
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.min.js"></script>
+
+	<script src=""></script> 
+	<script type="text/javascript">
+
+			Vue.component('usuarios', {
+				props: [''],
+				template: '#usuarios-template',
+				mounted(){
+					
+					axios.get('https://randomuser.me/api/?results=500')
+						.then((respuesta) => {
+							const listado = respuesta.data.results.map((usuario) => {
+								return {
+									nombre:`${usuario.name.title} ${usuario.name.first} ${usuario.name.last}`,
+									correo: usuario.email,
+									foto: usuario.picture.medium,
+									
+								}
+
+
+							})
+						this.users = listado
+
+						})
+
+				},
+				data(){
+					return {
+						users: [],
+						keyLook: '',
+					}
+				},
+				computed: {
+					filtrarUsuarios(){
+						return this.users.filter((usuario) => {
+							return usuario.nombre.includes(this.keyLook)
+						})
+					}
+				}
+			})
+
+			Vue.component('usuario', {
+				props:['dato'],
+				template: '#usuario-template'
+			})
+
+			
+
+			
+			let main = new Vue({
+			el: '#main',
+			mounted(){
+				
+			},
+			data: {
+				
+
+			},
+			methods: {
+				
+			}
+			
+			})
+
+
+
+
+	</script>
+
+</body>
+</html>
