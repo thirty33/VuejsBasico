@@ -94,7 +94,18 @@
 	<lista-tareas :tareas="tareas" >Tareas que necesito finalizar ya</lista-tareas>
 
 	<lista-tareas :tareas="tareas" >Tareas que ya finalice</lista-tareas>
+
+
+	<h1>Componentes dinamicos</h1>
+
+
+	<button @click="seleccionado = 'lista-tareas'" >Tareas</button>
+	<button @click="seleccionado = 'contacto'">Contacto</button>
+	<button @click="seleccionado = 'bio'">Bio</button>
+
 	
+
+	<component :is="seleccionado" :tareas="tareas"></component>
 
 
 	</div>
@@ -149,6 +160,25 @@
 						
 				}
 			})
+
+			Vue.component('contacto', {
+				template:`<div>
+					<a href="mailto:joe@example.com">joel@example.com</a>
+					<hr>
+
+				</div>`
+			})
+
+
+			Vue.component('bio', {
+				template:`<div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores ipsam, consequuntur adipisci blanditiis quo est asperiores velit fuga accusantium enim quis ratione qui mollitia illo cumque earum cupiditate laborum beatae.</p>
+					<hr>
+
+				</div>`
+			})
+
+
 			
 			let main = new Vue({
 			el: '#main',
@@ -156,12 +186,13 @@
 				
 			},
 			data: {
+				seleccionado: 'lista-tareas',
 				tareas: [
-				{nombre: 'pasta dental'},	
-				{nombre: 'shampoo'},	
-				{nombre: 'macarrones'},	
-
-				],
+					{nombre: 'hacer la cama'},	
+					{nombre: 'hacer la pijama'},	
+					{nombre: 'hacer la piscina'},	
+					{nombre: 'hacer la cara'},	
+				]
 
 			},
 			methods: {
